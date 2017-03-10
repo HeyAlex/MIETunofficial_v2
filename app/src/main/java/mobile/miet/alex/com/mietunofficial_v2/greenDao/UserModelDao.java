@@ -14,7 +14,7 @@ import org.greenrobot.greendao.internal.DaoConfig;
 /**
  * DAO for table "USER_MODEL".
 */
-public class UserModelDao extends AbstractDao<UserModel, Void> {
+public class UserModelDao extends AbstractDao<UserModel, String> {
 
     public static final String TABLENAME = "USER_MODEL";
 
@@ -23,7 +23,7 @@ public class UserModelDao extends AbstractDao<UserModel, Void> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property Numst = new Property(0, String.class, "numst", false, "NUMST");
+        public final static Property Numst = new Property(0, String.class, "numst", true, "NUMST");
         public final static Property Week = new Property(1, String.class, "week", false, "WEEK");
         public final static Property Firstname = new Property(2, String.class, "firstname", false, "FIRSTNAME");
         public final static Property Lastname = new Property(3, String.class, "lastname", false, "LASTNAME");
@@ -32,6 +32,8 @@ public class UserModelDao extends AbstractDao<UserModel, Void> {
         public final static Property Sem = new Property(6, String.class, "sem", false, "SEM");
     }
 
+    private DaoSession daoSession;
+
 
     public UserModelDao(DaoConfig config) {
         super(config);
@@ -39,13 +41,14 @@ public class UserModelDao extends AbstractDao<UserModel, Void> {
     
     public UserModelDao(DaoConfig config, DaoSession daoSession) {
         super(config, daoSession);
+        this.daoSession = daoSession;
     }
 
     /** Creates the underlying database table. */
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"USER_MODEL\" (" + //
-                "\"NUMST\" TEXT," + // 0: numst
+                "\"NUMST\" TEXT PRIMARY KEY NOT NULL ," + // 0: numst
                 "\"WEEK\" TEXT," + // 1: week
                 "\"FIRSTNAME\" TEXT," + // 2: firstname
                 "\"LASTNAME\" TEXT," + // 3: lastname
@@ -63,11 +66,7 @@ public class UserModelDao extends AbstractDao<UserModel, Void> {
     @Override
     protected final void bindValues(DatabaseStatement stmt, UserModel entity) {
         stmt.clearBindings();
- 
-        String numst = entity.getNumst();
-        if (numst != null) {
-            stmt.bindString(1, numst);
-        }
+        stmt.bindString(1, entity.getNumst());
  
         String week = entity.getWeek();
         if (week != null) {
@@ -103,11 +102,7 @@ public class UserModelDao extends AbstractDao<UserModel, Void> {
     @Override
     protected final void bindValues(SQLiteStatement stmt, UserModel entity) {
         stmt.clearBindings();
- 
-        String numst = entity.getNumst();
-        if (numst != null) {
-            stmt.bindString(1, numst);
-        }
+        stmt.bindString(1, entity.getNumst());
  
         String week = entity.getWeek();
         if (week != null) {
@@ -141,14 +136,20 @@ public class UserModelDao extends AbstractDao<UserModel, Void> {
     }
 
     @Override
-    public Void readKey(Cursor cursor, int offset) {
-        return null;
+    protected final void attachEntity(UserModel entity) {
+        super.attachEntity(entity);
+        entity.__setDaoSession(daoSession);
+    }
+
+    @Override
+    public String readKey(Cursor cursor, int offset) {
+        return cursor.getString(offset + 0);
     }    
 
     @Override
     public UserModel readEntity(Cursor cursor, int offset) {
         UserModel entity = new UserModel( //
-            cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0), // numst
+            cursor.getString(offset + 0), // numst
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // week
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // firstname
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // lastname
@@ -161,7 +162,7 @@ public class UserModelDao extends AbstractDao<UserModel, Void> {
      
     @Override
     public void readEntity(Cursor cursor, UserModel entity, int offset) {
-        entity.setNumst(cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0));
+        entity.setNumst(cursor.getString(offset + 0));
         entity.setWeek(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setFirstname(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setLastname(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
@@ -171,20 +172,22 @@ public class UserModelDao extends AbstractDao<UserModel, Void> {
      }
     
     @Override
-    protected final Void updateKeyAfterInsert(UserModel entity, long rowId) {
-        // Unsupported or missing PK type
-        return null;
+    protected final String updateKeyAfterInsert(UserModel entity, long rowId) {
+        return entity.getNumst();
     }
     
     @Override
-    public Void getKey(UserModel entity) {
-        return null;
+    public String getKey(UserModel entity) {
+        if(entity != null) {
+            return entity.getNumst();
+        } else {
+            return null;
+        }
     }
 
     @Override
     public boolean hasKey(UserModel entity) {
-        // TODO
-        return false;
+        throw new UnsupportedOperationException("Unsupported for entities with a non-null key");
     }
 
     @Override

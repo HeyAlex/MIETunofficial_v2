@@ -18,17 +18,17 @@ import java.util.Map;
 public class DaoSession extends AbstractDaoSession {
 
     private final DaoConfig newsModelDaoConfig;
+    private final DaoConfig userModelDaoConfig;
     private final DaoConfig disciplineModelDaoConfig;
     private final DaoConfig eventModelDaoConfig;
-    private final DaoConfig userModelDaoConfig;
     private final DaoConfig scheduleModelDaoConfig;
     private final DaoConfig lessonModelDaoConfig;
     private final DaoConfig resourceModelDaoConfig;
 
     private final NewsModelDao newsModelDao;
+    private final UserModelDao userModelDao;
     private final DisciplineModelDao disciplineModelDao;
     private final EventModelDao eventModelDao;
-    private final UserModelDao userModelDao;
     private final ScheduleModelDao scheduleModelDao;
     private final LessonModelDao lessonModelDao;
     private final ResourceModelDao resourceModelDao;
@@ -40,14 +40,14 @@ public class DaoSession extends AbstractDaoSession {
         newsModelDaoConfig = daoConfigMap.get(NewsModelDao.class).clone();
         newsModelDaoConfig.initIdentityScope(type);
 
+        userModelDaoConfig = daoConfigMap.get(UserModelDao.class).clone();
+        userModelDaoConfig.initIdentityScope(type);
+
         disciplineModelDaoConfig = daoConfigMap.get(DisciplineModelDao.class).clone();
         disciplineModelDaoConfig.initIdentityScope(type);
 
         eventModelDaoConfig = daoConfigMap.get(EventModelDao.class).clone();
         eventModelDaoConfig.initIdentityScope(type);
-
-        userModelDaoConfig = daoConfigMap.get(UserModelDao.class).clone();
-        userModelDaoConfig.initIdentityScope(type);
 
         scheduleModelDaoConfig = daoConfigMap.get(ScheduleModelDao.class).clone();
         scheduleModelDaoConfig.initIdentityScope(type);
@@ -59,17 +59,17 @@ public class DaoSession extends AbstractDaoSession {
         resourceModelDaoConfig.initIdentityScope(type);
 
         newsModelDao = new NewsModelDao(newsModelDaoConfig, this);
+        userModelDao = new UserModelDao(userModelDaoConfig, this);
         disciplineModelDao = new DisciplineModelDao(disciplineModelDaoConfig, this);
         eventModelDao = new EventModelDao(eventModelDaoConfig, this);
-        userModelDao = new UserModelDao(userModelDaoConfig, this);
         scheduleModelDao = new ScheduleModelDao(scheduleModelDaoConfig, this);
         lessonModelDao = new LessonModelDao(lessonModelDaoConfig, this);
         resourceModelDao = new ResourceModelDao(resourceModelDaoConfig, this);
 
         registerDao(NewsModel.class, newsModelDao);
+        registerDao(UserModel.class, userModelDao);
         registerDao(DisciplineModel.class, disciplineModelDao);
         registerDao(EventModel.class, eventModelDao);
-        registerDao(UserModel.class, userModelDao);
         registerDao(ScheduleModel.class, scheduleModelDao);
         registerDao(LessonModel.class, lessonModelDao);
         registerDao(ResourceModel.class, resourceModelDao);
@@ -77,9 +77,9 @@ public class DaoSession extends AbstractDaoSession {
     
     public void clear() {
         newsModelDaoConfig.clearIdentityScope();
+        userModelDaoConfig.clearIdentityScope();
         disciplineModelDaoConfig.clearIdentityScope();
         eventModelDaoConfig.clearIdentityScope();
-        userModelDaoConfig.clearIdentityScope();
         scheduleModelDaoConfig.clearIdentityScope();
         lessonModelDaoConfig.clearIdentityScope();
         resourceModelDaoConfig.clearIdentityScope();
@@ -89,16 +89,16 @@ public class DaoSession extends AbstractDaoSession {
         return newsModelDao;
     }
 
+    public UserModelDao getUserModelDao() {
+        return userModelDao;
+    }
+
     public DisciplineModelDao getDisciplineModelDao() {
         return disciplineModelDao;
     }
 
     public EventModelDao getEventModelDao() {
         return eventModelDao;
-    }
-
-    public UserModelDao getUserModelDao() {
-        return userModelDao;
     }
 
     public ScheduleModelDao getScheduleModelDao() {

@@ -23,9 +23,9 @@ public class DaoMaster extends AbstractDaoMaster {
     /** Creates underlying database table using DAOs. */
     public static void createAllTables(Database db, boolean ifNotExists) {
         NewsModelDao.createTable(db, ifNotExists);
+        UserModelDao.createTable(db, ifNotExists);
         DisciplineModelDao.createTable(db, ifNotExists);
         EventModelDao.createTable(db, ifNotExists);
-        UserModelDao.createTable(db, ifNotExists);
         ScheduleModelDao.createTable(db, ifNotExists);
         LessonModelDao.createTable(db, ifNotExists);
         ResourceModelDao.createTable(db, ifNotExists);
@@ -34,9 +34,9 @@ public class DaoMaster extends AbstractDaoMaster {
     /** Drops underlying database table using DAOs. */
     public static void dropAllTables(Database db, boolean ifExists) {
         NewsModelDao.dropTable(db, ifExists);
+        UserModelDao.dropTable(db, ifExists);
         DisciplineModelDao.dropTable(db, ifExists);
         EventModelDao.dropTable(db, ifExists);
-        UserModelDao.dropTable(db, ifExists);
         ScheduleModelDao.dropTable(db, ifExists);
         LessonModelDao.dropTable(db, ifExists);
         ResourceModelDao.dropTable(db, ifExists);
@@ -59,9 +59,9 @@ public class DaoMaster extends AbstractDaoMaster {
     public DaoMaster(Database db) {
         super(db, SCHEMA_VERSION);
         registerDaoClass(NewsModelDao.class);
+        registerDaoClass(UserModelDao.class);
         registerDaoClass(DisciplineModelDao.class);
         registerDaoClass(EventModelDao.class);
-        registerDaoClass(UserModelDao.class);
         registerDaoClass(ScheduleModelDao.class);
         registerDaoClass(LessonModelDao.class);
         registerDaoClass(ResourceModelDao.class);

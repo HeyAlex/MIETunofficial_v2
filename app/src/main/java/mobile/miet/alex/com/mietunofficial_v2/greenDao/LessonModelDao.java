@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * DAO for table "LESSON_MODEL".
 */
-public class LessonModelDao extends AbstractDao<LessonModel, Long> {
+public class LessonModelDao extends AbstractDao<LessonModel, Void> {
 
     public static final String TABLENAME = "LESSON_MODEL";
 
@@ -27,24 +27,17 @@ public class LessonModelDao extends AbstractDao<LessonModel, Long> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property Week = new Property(1, Integer.class, "week", false, "WEEK");
-        public final static Property Day = new Property(2, String.class, "day", false, "DAY");
-        public final static Property Room = new Property(3, String.class, "room", false, "ROOM");
-        public final static Property Time = new Property(4, String.class, "time", false, "TIME");
-        public final static Property TimeFrom = new Property(5, String.class, "timeFrom", false, "TIME_FROM");
-        public final static Property TimeTo = new Property(6, String.class, "timeTo", false, "TIME_TO");
-        public final static Property Code = new Property(7, String.class, "code", false, "CODE");
-        public final static Property Week1 = new Property(8, boolean.class, "week1", false, "WEEK1");
-        public final static Property Week2 = new Property(9, boolean.class, "week2", false, "WEEK2");
-        public final static Property Week3 = new Property(10, boolean.class, "week3", false, "WEEK3");
-        public final static Property Week4 = new Property(11, boolean.class, "week4", false, "WEEK4");
+        public final static Property Week = new Property(0, Integer.class, "week", false, "WEEK");
+        public final static Property Day = new Property(1, Integer.class, "day", false, "DAY");
+        public final static Property Room = new Property(2, String.class, "room", false, "ROOM");
+        public final static Property Time = new Property(3, String.class, "time", false, "TIME");
+        public final static Property TimeFrom = new Property(4, String.class, "timeFrom", false, "TIME_FROM");
+        public final static Property TimeTo = new Property(5, String.class, "timeTo", false, "TIME_TO");
+        public final static Property Code = new Property(6, String.class, "code", false, "CODE");
+        public final static Property GroupName = new Property(7, String.class, "groupName", false, "GROUP_NAME");
     }
 
-    private Query<LessonModel> scheduleModel_LessonsOneQuery;
-    private Query<LessonModel> scheduleModel_LessonsTwoQuery;
-    private Query<LessonModel> scheduleModel_LessonsThirdQuery;
-    private Query<LessonModel> scheduleModel_LessonsFourQuery;
+    private Query<LessonModel> scheduleModel_LessonsQuery;
 
     public LessonModelDao(DaoConfig config) {
         super(config);
@@ -58,18 +51,14 @@ public class LessonModelDao extends AbstractDao<LessonModel, Long> {
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"LESSON_MODEL\" (" + //
-                "\"_id\" INTEGER PRIMARY KEY ," + // 0: id
-                "\"WEEK\" INTEGER," + // 1: week
-                "\"DAY\" TEXT," + // 2: day
-                "\"ROOM\" TEXT," + // 3: room
-                "\"TIME\" TEXT," + // 4: time
-                "\"TIME_FROM\" TEXT," + // 5: timeFrom
-                "\"TIME_TO\" TEXT," + // 6: timeTo
-                "\"CODE\" TEXT," + // 7: code
-                "\"WEEK1\" INTEGER NOT NULL ," + // 8: week1
-                "\"WEEK2\" INTEGER NOT NULL ," + // 9: week2
-                "\"WEEK3\" INTEGER NOT NULL ," + // 10: week3
-                "\"WEEK4\" INTEGER NOT NULL );"); // 11: week4
+                "\"WEEK\" INTEGER," + // 0: week
+                "\"DAY\" INTEGER," + // 1: day
+                "\"ROOM\" TEXT," + // 2: room
+                "\"TIME\" TEXT," + // 3: time
+                "\"TIME_FROM\" TEXT," + // 4: timeFrom
+                "\"TIME_TO\" TEXT," + // 5: timeTo
+                "\"CODE\" TEXT," + // 6: code
+                "\"GROUP_NAME\" TEXT NOT NULL );"); // 7: groupName
     }
 
     /** Drops the underlying database table. */
@@ -82,158 +71,131 @@ public class LessonModelDao extends AbstractDao<LessonModel, Long> {
     protected final void bindValues(DatabaseStatement stmt, LessonModel entity) {
         stmt.clearBindings();
  
-        Long id = entity.getId();
-        if (id != null) {
-            stmt.bindLong(1, id);
-        }
- 
         Integer week = entity.getWeek();
         if (week != null) {
-            stmt.bindLong(2, week);
+            stmt.bindLong(1, week);
         }
  
-        String day = entity.getDay();
+        Integer day = entity.getDay();
         if (day != null) {
-            stmt.bindString(3, day);
+            stmt.bindLong(2, day);
         }
  
         String room = entity.getRoom();
         if (room != null) {
-            stmt.bindString(4, room);
+            stmt.bindString(3, room);
         }
  
         String time = entity.getTime();
         if (time != null) {
-            stmt.bindString(5, time);
+            stmt.bindString(4, time);
         }
  
         String timeFrom = entity.getTimeFrom();
         if (timeFrom != null) {
-            stmt.bindString(6, timeFrom);
+            stmt.bindString(5, timeFrom);
         }
  
         String timeTo = entity.getTimeTo();
         if (timeTo != null) {
-            stmt.bindString(7, timeTo);
+            stmt.bindString(6, timeTo);
         }
  
         String code = entity.getCode();
         if (code != null) {
-            stmt.bindString(8, code);
+            stmt.bindString(7, code);
         }
-        stmt.bindLong(9, entity.getWeek1() ? 1L: 0L);
-        stmt.bindLong(10, entity.getWeek2() ? 1L: 0L);
-        stmt.bindLong(11, entity.getWeek3() ? 1L: 0L);
-        stmt.bindLong(12, entity.getWeek4() ? 1L: 0L);
+        stmt.bindString(8, entity.getGroupName());
     }
 
     @Override
     protected final void bindValues(SQLiteStatement stmt, LessonModel entity) {
         stmt.clearBindings();
  
-        Long id = entity.getId();
-        if (id != null) {
-            stmt.bindLong(1, id);
-        }
- 
         Integer week = entity.getWeek();
         if (week != null) {
-            stmt.bindLong(2, week);
+            stmt.bindLong(1, week);
         }
  
-        String day = entity.getDay();
+        Integer day = entity.getDay();
         if (day != null) {
-            stmt.bindString(3, day);
+            stmt.bindLong(2, day);
         }
  
         String room = entity.getRoom();
         if (room != null) {
-            stmt.bindString(4, room);
+            stmt.bindString(3, room);
         }
  
         String time = entity.getTime();
         if (time != null) {
-            stmt.bindString(5, time);
+            stmt.bindString(4, time);
         }
  
         String timeFrom = entity.getTimeFrom();
         if (timeFrom != null) {
-            stmt.bindString(6, timeFrom);
+            stmt.bindString(5, timeFrom);
         }
  
         String timeTo = entity.getTimeTo();
         if (timeTo != null) {
-            stmt.bindString(7, timeTo);
+            stmt.bindString(6, timeTo);
         }
  
         String code = entity.getCode();
         if (code != null) {
-            stmt.bindString(8, code);
+            stmt.bindString(7, code);
         }
-        stmt.bindLong(9, entity.getWeek1() ? 1L: 0L);
-        stmt.bindLong(10, entity.getWeek2() ? 1L: 0L);
-        stmt.bindLong(11, entity.getWeek3() ? 1L: 0L);
-        stmt.bindLong(12, entity.getWeek4() ? 1L: 0L);
+        stmt.bindString(8, entity.getGroupName());
     }
 
     @Override
-    public Long readKey(Cursor cursor, int offset) {
-        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
+    public Void readKey(Cursor cursor, int offset) {
+        return null;
     }    
 
     @Override
     public LessonModel readEntity(Cursor cursor, int offset) {
         LessonModel entity = new LessonModel( //
-            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1), // week
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // day
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // room
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // time
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // timeFrom
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // timeTo
-            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // code
-            cursor.getShort(offset + 8) != 0, // week1
-            cursor.getShort(offset + 9) != 0, // week2
-            cursor.getShort(offset + 10) != 0, // week3
-            cursor.getShort(offset + 11) != 0 // week4
+            cursor.isNull(offset + 0) ? null : cursor.getInt(offset + 0), // week
+            cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1), // day
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // room
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // time
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // timeFrom
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // timeTo
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // code
+            cursor.getString(offset + 7) // groupName
         );
         return entity;
     }
      
     @Override
     public void readEntity(Cursor cursor, LessonModel entity, int offset) {
-        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setWeek(cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1));
-        entity.setDay(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setRoom(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setTime(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setTimeFrom(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
-        entity.setTimeTo(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
-        entity.setCode(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
-        entity.setWeek1(cursor.getShort(offset + 8) != 0);
-        entity.setWeek2(cursor.getShort(offset + 9) != 0);
-        entity.setWeek3(cursor.getShort(offset + 10) != 0);
-        entity.setWeek4(cursor.getShort(offset + 11) != 0);
+        entity.setWeek(cursor.isNull(offset + 0) ? null : cursor.getInt(offset + 0));
+        entity.setDay(cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1));
+        entity.setRoom(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setTime(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setTimeFrom(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setTimeTo(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setCode(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setGroupName(cursor.getString(offset + 7));
      }
     
     @Override
-    protected final Long updateKeyAfterInsert(LessonModel entity, long rowId) {
-        entity.setId(rowId);
-        return rowId;
+    protected final Void updateKeyAfterInsert(LessonModel entity, long rowId) {
+        // Unsupported or missing PK type
+        return null;
     }
     
     @Override
-    public Long getKey(LessonModel entity) {
-        if(entity != null) {
-            return entity.getId();
-        } else {
-            return null;
-        }
+    public Void getKey(LessonModel entity) {
+        return null;
     }
 
     @Override
     public boolean hasKey(LessonModel entity) {
-        return entity.getId() != null;
+        // TODO
+        return false;
     }
 
     @Override
@@ -241,59 +203,17 @@ public class LessonModelDao extends AbstractDao<LessonModel, Long> {
         return true;
     }
     
-    /** Internal query to resolve the "LessonsOne" to-many relationship of ScheduleModel. */
-    public List<LessonModel> _queryScheduleModel_LessonsOne(boolean week1) {
+    /** Internal query to resolve the "lessons" to-many relationship of ScheduleModel. */
+    public List<LessonModel> _queryScheduleModel_Lessons(String groupName) {
         synchronized (this) {
-            if (scheduleModel_LessonsOneQuery == null) {
+            if (scheduleModel_LessonsQuery == null) {
                 QueryBuilder<LessonModel> queryBuilder = queryBuilder();
-                queryBuilder.where(Properties.Week1.eq(null));
-                scheduleModel_LessonsOneQuery = queryBuilder.build();
+                queryBuilder.where(Properties.GroupName.eq(null));
+                scheduleModel_LessonsQuery = queryBuilder.build();
             }
         }
-        Query<LessonModel> query = scheduleModel_LessonsOneQuery.forCurrentThread();
-        query.setParameter(0, week1);
-        return query.list();
-    }
-
-    /** Internal query to resolve the "LessonsTwo" to-many relationship of ScheduleModel. */
-    public List<LessonModel> _queryScheduleModel_LessonsTwo(boolean week2) {
-        synchronized (this) {
-            if (scheduleModel_LessonsTwoQuery == null) {
-                QueryBuilder<LessonModel> queryBuilder = queryBuilder();
-                queryBuilder.where(Properties.Week2.eq(null));
-                scheduleModel_LessonsTwoQuery = queryBuilder.build();
-            }
-        }
-        Query<LessonModel> query = scheduleModel_LessonsTwoQuery.forCurrentThread();
-        query.setParameter(0, week2);
-        return query.list();
-    }
-
-    /** Internal query to resolve the "LessonsThird" to-many relationship of ScheduleModel. */
-    public List<LessonModel> _queryScheduleModel_LessonsThird(boolean week3) {
-        synchronized (this) {
-            if (scheduleModel_LessonsThirdQuery == null) {
-                QueryBuilder<LessonModel> queryBuilder = queryBuilder();
-                queryBuilder.where(Properties.Week3.eq(null));
-                scheduleModel_LessonsThirdQuery = queryBuilder.build();
-            }
-        }
-        Query<LessonModel> query = scheduleModel_LessonsThirdQuery.forCurrentThread();
-        query.setParameter(0, week3);
-        return query.list();
-    }
-
-    /** Internal query to resolve the "LessonsFour" to-many relationship of ScheduleModel. */
-    public List<LessonModel> _queryScheduleModel_LessonsFour(boolean week4) {
-        synchronized (this) {
-            if (scheduleModel_LessonsFourQuery == null) {
-                QueryBuilder<LessonModel> queryBuilder = queryBuilder();
-                queryBuilder.where(Properties.Week4.eq(null));
-                scheduleModel_LessonsFourQuery = queryBuilder.build();
-            }
-        }
-        Query<LessonModel> query = scheduleModel_LessonsFourQuery.forCurrentThread();
-        query.setParameter(0, week4);
+        Query<LessonModel> query = scheduleModel_LessonsQuery.forCurrentThread();
+        query.setParameter(0, groupName);
         return query.list();
     }
 

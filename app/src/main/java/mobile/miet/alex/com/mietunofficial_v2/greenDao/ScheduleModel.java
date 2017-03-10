@@ -33,24 +33,9 @@ public class ScheduleModel implements java.io.Serializable {
     private transient ScheduleModelDao myDao;
 
     @ToMany(joinProperties = {
-        @JoinProperty(name = "group", referencedName = "week1")
+        @JoinProperty(name = "group", referencedName = "groupName")
     })
-    private List<LessonModel> LessonsOne;
-
-    @ToMany(joinProperties = {
-        @JoinProperty(name = "group", referencedName = "week2")
-    })
-    private List<LessonModel> LessonsTwo;
-
-    @ToMany(joinProperties = {
-        @JoinProperty(name = "group", referencedName = "week3")
-    })
-    private List<LessonModel> LessonsThird;
-
-    @ToMany(joinProperties = {
-        @JoinProperty(name = "group", referencedName = "week4")
-    })
-    private List<LessonModel> LessonsFour;
+    private List<LessonModel> lessons;
 
     // KEEP FIELDS - put your custom fields here
     // KEEP FIELDS END
@@ -94,90 +79,24 @@ public class ScheduleModel implements java.io.Serializable {
 
     /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */
     @Generated
-    public List<LessonModel> getLessonsOne() {
-        if (LessonsOne == null) {
+    public List<LessonModel> getLessons() {
+        if (lessons == null) {
             __throwIfDetached();
             LessonModelDao targetDao = daoSession.getLessonModelDao();
-            List<LessonModel> LessonsOneNew = targetDao._queryScheduleModel_LessonsOne(group);
+            List<LessonModel> lessonsNew = targetDao._queryScheduleModel_Lessons(group);
             synchronized (this) {
-                if(LessonsOne == null) {
-                    LessonsOne = LessonsOneNew;
+                if(lessons == null) {
+                    lessons = lessonsNew;
                 }
             }
         }
-        return LessonsOne;
+        return lessons;
     }
 
     /** Resets a to-many relationship, making the next get call to query for a fresh result. */
     @Generated
-    public synchronized void resetLessonsOne() {
-        LessonsOne = null;
-    }
-
-    /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */
-    @Generated
-    public List<LessonModel> getLessonsTwo() {
-        if (LessonsTwo == null) {
-            __throwIfDetached();
-            LessonModelDao targetDao = daoSession.getLessonModelDao();
-            List<LessonModel> LessonsTwoNew = targetDao._queryScheduleModel_LessonsTwo(group);
-            synchronized (this) {
-                if(LessonsTwo == null) {
-                    LessonsTwo = LessonsTwoNew;
-                }
-            }
-        }
-        return LessonsTwo;
-    }
-
-    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
-    @Generated
-    public synchronized void resetLessonsTwo() {
-        LessonsTwo = null;
-    }
-
-    /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */
-    @Generated
-    public List<LessonModel> getLessonsThird() {
-        if (LessonsThird == null) {
-            __throwIfDetached();
-            LessonModelDao targetDao = daoSession.getLessonModelDao();
-            List<LessonModel> LessonsThirdNew = targetDao._queryScheduleModel_LessonsThird(group);
-            synchronized (this) {
-                if(LessonsThird == null) {
-                    LessonsThird = LessonsThirdNew;
-                }
-            }
-        }
-        return LessonsThird;
-    }
-
-    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
-    @Generated
-    public synchronized void resetLessonsThird() {
-        LessonsThird = null;
-    }
-
-    /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */
-    @Generated
-    public List<LessonModel> getLessonsFour() {
-        if (LessonsFour == null) {
-            __throwIfDetached();
-            LessonModelDao targetDao = daoSession.getLessonModelDao();
-            List<LessonModel> LessonsFourNew = targetDao._queryScheduleModel_LessonsFour(group);
-            synchronized (this) {
-                if(LessonsFour == null) {
-                    LessonsFour = LessonsFourNew;
-                }
-            }
-        }
-        return LessonsFour;
-    }
-
-    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
-    @Generated
-    public synchronized void resetLessonsFour() {
-        LessonsFour = null;
+    public synchronized void resetLessons() {
+        lessons = null;
     }
 
     /**
