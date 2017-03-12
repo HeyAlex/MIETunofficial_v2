@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 /**
  * JsonSchema2PoJo
  */
-/*package*/ class MarkJson {
+/*package*/ class GradesJson {
 
     /**
      * They pass a string if the student has missed this control event
@@ -14,11 +14,9 @@ import com.google.gson.annotations.SerializedName;
     @SerializedName("b")
     /*package*/ Object ballPoints;
 
+
     @SerializedName("o")
     /*package*/ int markPoints;
-
-    @SerializedName("tutor")
-    /*package*/ String enteredBy;
 }
 
 

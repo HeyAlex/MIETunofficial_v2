@@ -1,4 +1,4 @@
-package mobile.miet.alex.com.mietunofficial_v2.model.orioks.json;
+package mobile.miet.alex.com.mietunofficial_v2.model.orioks;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -24,6 +24,9 @@ import com.google.gson.annotations.SerializedName;
 
     @SerializedName("type_name")
     /*package*/ String typeName;
+
+    @SerializedName("sh")
+    /*package*/ String sh;
 
     @SerializedName("week")
     /*package*/ int week;

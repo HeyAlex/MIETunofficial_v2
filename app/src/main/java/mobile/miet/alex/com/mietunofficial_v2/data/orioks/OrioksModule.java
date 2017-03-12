@@ -4,31 +4,34 @@ import android.content.Context;
 
 import org.greenrobot.greendao.database.Database;
 
-import java.util.Collection;
-import java.util.List;
-
 import javax.inject.Singleton;
 
 import dagger.Provides;
-import mobile.miet.alex.com.mietunofficial_v2.data.BaseRepository;
-import mobile.miet.alex.com.mietunofficial_v2.greenDao.DaoMaster;
-import mobile.miet.alex.com.mietunofficial_v2.greenDao.DaoSession;
-import mobile.miet.alex.com.mietunofficial_v2.greenDao.DisciplineModel;
-import mobile.miet.alex.com.mietunofficial_v2.greenDao.UserModel;
+import mobile.miet.alex.com.mietunofficial_v2.api.orioks.Orioks;
+import mobile.miet.alex.com.mietunofficial_v2.api.orioks.OrioksImpl;
+import mobile.miet.alex.com.mietunofficial_v2.data.orioks.credentials.CredentialsRepository;
+import mobile.miet.alex.com.mietunofficial_v2.data.orioks.credentials.CredentialsRepositoryImpl;
+import mobile.miet.alex.com.mietunofficial_v2.data.orioks.disciplines.DisciplineRepositoryImpl;
+
+import mobile.miet.alex.com.mietunofficial_v2.data.orioks.events.EventRepositoryImpl;
+import mobile.miet.alex.com.mietunofficial_v2.data.orioks.users.UserRepository;
+import mobile.miet.alex.com.mietunofficial_v2.data.DaoMaster;
+import mobile.miet.alex.com.mietunofficial_v2.data.DaoSession;
+import mobile.miet.alex.com.mietunofficial_v2.data.orioks.users.UserRepositoryImpl;
 
 public class OrioksModule{
     private static final String DATABASE_NAME = "orioks.db";
-    private final DisciplineRepository disciplineRepository;
-    private final EventRepository eventRepository;
+    private final DisciplineRepositoryImpl disciplineRepository;
+    private final EventRepositoryImpl eventRepository;
     private final UserRepository userRepository;
     private final CredentialsRepository credentialsRepository;
 
     public OrioksModule(Context context) {
         DaoSession daoSession = createDaoSession(context);
-        this.disciplineRepository = new AudiosRepositoryImpl(daoSession.getAudioDao());
-        this.eventRepository = new AppUsersRepositoryImpl(context, daoSession.getAppUserDao());
-        this.userRepository = new UserTokenRepositoryImpl(daoSession.getUserTokenDao());
-        this.credentialsRepository = new VkUsersRepositoryImpl(daoSession.getVkUserDao());
+        this.disciplineRepository = new DisciplineRepositoryImpl(daoSession.getDisciplineModelDao());
+        this.eventRepository = new EventRepositoryImpl(daoSession.getEventModelDao());
+        this.userRepository = new UserRepositoryImpl(daoSession.getUserModelDao());
+        this.credentialsRepository = new CredentialsRepositoryImpl(context);
     }
 
     private DaoSession createDaoSession(Context context) {
@@ -39,26 +42,31 @@ public class OrioksModule{
 
     @Provides
     @Singleton
-    public DisciplineRepository provideDisciplinesRepository() {
-        return audiosRepository;
+    public DisciplineRepositoryImpl provideDisciplinesRepository() {
+        return disciplineRepository;
     }
 
     @Provides
     @Singleton
-    public EventRepository provideEventRepository() {
-        return appUsersRepository;
+    public EventRepositoryImpl provideEventRepository() {
+        return eventRepository;
     }
 
     @Provides
     @Singleton
-    public UserRepository provideUserTokenRepository() {
-        return userTokenRepository;
+    public UserRepository provideUserRepository() {
+        return userRepository;
     }
 
     @Provides
     @Singleton
-    public CredentialsRepository provideVkUsersRepository() {
-        return vkUsersRepository;
+    public CredentialsRepository provideCredentialsRepository() {
+        return credentialsRepository;
     }
 
+    @Provides
+    @Singleton
+    public Orioks provideOrioks() {
+        return new OrioksImpl();
+    }
 }
